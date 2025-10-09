@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Ar-Condicionado</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f4f8; text-align: center; }
+        .painel { background: white; padding: 30px; border-radius: 15px; display: inline-block; margin-top: 50px; }
+        button { margin: 10px; padding: 10px 20px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .status { font-size: 1.2em; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="painel">
+        <h2>Controle do Ar-Condicionado</h2>
+
+        <div class="status">
+            <p><strong>Status:</strong> {{ ar.ligado|yesno:"Ligado,Desligado" }}</p>
+            <p><strong>Temperatura:</strong> {{ ar.temperatura }} °C</p>
+            <p><strong>Modo:</strong> {{ ar.modo }}</p>
+            <p><strong>Velocidade:</strong> {{ ar.velocidade }}</p>
+        </div>
+
+        <div class="botoes">
+            <form method="post" action="{% url 'alternar' %}">{% csrf_token %}
+                <button type="submit">{{ ar.ligado|yesno:"Desligar,Ligar" }}</button>
+            </form>
+
+            <form method="post" action="{% url 'aumentar' %}">{% csrf_token %}
+                <button type="submit">Aumentar Temp</button>
+            </form>
+
+            <form method="post" action="{% url 'diminuir' %}">{% csrf_token %}
+                <button type="submit">Diminuir Temp</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

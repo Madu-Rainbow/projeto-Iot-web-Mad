@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 from .views import CustomLoginView, CustomLogoutView
 
@@ -8,4 +8,5 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('register/', views.registro, name='register'),
+    path('ar_condicionado/', include('ar_condicionado.urls')), 
 ]
