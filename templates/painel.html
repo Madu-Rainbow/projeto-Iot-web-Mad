@@ -12,29 +12,78 @@
     </style>
 </head>
 <body>
-    <div class="painel">
-        <h2>Controle do Ar-Condicionado</h2>
-
-        <div class="status">
-            <p><strong>Status:</strong> {{ ar.ligado|yesno:"Ligado,Desligado" }}</p>
-            <p><strong>Temperatura:</strong> {{ ar.temperatura }} °C</p>
-            <p><strong>Modo:</strong> {{ ar.modo }}</p>
-            <p><strong>Velocidade:</strong> {{ ar.velocidade }}</p>
-        </div>
-
-        <div class="botoes">
-            <form method="post" action="{% url 'alternar' %}">{% csrf_token %}
-                <button type="submit">{{ ar.ligado|yesno:"Desligar,Ligar" }}</button>
-            </form>
-
-            <form method="post" action="{% url 'aumentar' %}">{% csrf_token %}
-                <button type="submit">Aumentar Temp</button>
-            </form>
-
-            <form method="post" action="{% url 'diminuir' %}">{% csrf_token %}
-                <button type="submit">Diminuir Temp</button>
-            </form>
+    {% extends "base.html" %}
+{% block title %}Painel Ar Condicionado{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card text-center mb-4">
+            <div class="card-header bg-primary text-white">
+                Status do Ar-Condicionado
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    {% if ar.ligado %}
+                        <span class="badge bg-success">Ligado</span>
+                    {% else %}
+                        <span class="badge bg-danger">Desligado</span>
+                    {% endif %}
+                </h5>
+                <form method="post" action="{% url 'alternar' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">
+                        {% if ar.ligado %}Desligar{% else %}Ligar{% endif %}
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card text-center mb-4">
+            <div class="card-header bg-info text-white">
+                Temperatura
+            </div>
+            <div class="card-body">
+                <h5 class="card-title display-4">{{ ar.temperatura }}°C</h5>
+                <div class="d-flex justify-content-center gap-2">
+                    <form method="post" action="{% url 'aumentar' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" {% if not ar.ligado %}disabled{% endif %}>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </form>
+                    <form method="post" action="{% url 'diminuir' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" {% if not ar.ligado %}disabled{% endif %}>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    {% if ar.ligado %}
+                        <span class="badge bg-success">Ligado</span>
+                        <br>
+                        <small>Tempo ligado: 
+                            {% if tempo_ligado %}
+                                {% with total=tempo_ligado.total_seconds %}
+                                    {% with minutos=total|divisibleby:60 segundos=total|floatformat:0 %}
+                                        {{ minutos|floatformat:0 }} min {{ segundos|floatformat:0 }} seg
+                                    {% endwith %}
+                                {% endwith %}
+                            {% else %}
+                                0 segundos
+                            {% endif %}
+                        </small>
+                    {% else %}
+                        <span class="badge bg-danger">Desligado</span>
+                    {% endif %}
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 </body>
 </html>

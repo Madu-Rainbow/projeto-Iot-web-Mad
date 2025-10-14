@@ -7,9 +7,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 
 
-def home(request):
-    """Página inicial"""
-    return render(request, 'core/home.html')
+#def home(request):
+  #  """Página inicial"""
+ #   return render(request, 'core/home.html')
 
 
 @login_required
@@ -41,4 +41,4 @@ class CustomLoginView(LoginView):
 
 
 class CustomLogoutView(LogoutView):
-    next_page = 'home'
+    next_page = 'login'
