@@ -84,6 +84,29 @@
         </div>
     </div>
 </div>
+<div class="container">
+    <div class="card text-center mb-3" style="max-width: 250px; margin: 0 auto; font-size: 0.9em;">
+  <div class="card-header bg-secondary text-white py-2">
+    Modo de Operação
+  </div>
+  <div class="card-body p-2">
+    <form method="post" action="{% url 'alterar_modo_with_pk' ar.pk %}">
+      {% csrf_token %}
+      <select name="modo" class="form-select form-select-sm w-75 mx-auto mb-2"
+              {% if not ar.ligado %}disabled{% endif %}>
+        <option value="Frio" {% if ar.modo == "Frio" %}selected{% endif %}>❄️ Frio</option>
+        <option value="Quente" {% if ar.modo == "Quente" %}selected{% endif %}>🔥 Quente</option>
+        <option value="Ventilar" {% if ar.modo == "Ventilar" %}selected{% endif %}>💨 Ventilar</option>
+        <option value="Automático" {% if ar.modo == "Automático" %}selected{% endif %}>⚙️ Automático</option>
+      </select>
+      <button type="submit" class="btn btn-info btn-sm" {% if not ar.ligado %}disabled{% endif %}>
+        Aplicar
+      </button>
+    </form>
+  </div>
+</div>
+
+</div>
 {% endblock %}
 </body>
 </html>

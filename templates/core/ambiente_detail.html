@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Ambiente: {{ ambiente.nome }}{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h4>{{ ambiente.nome }}</h4>
+    <p>{{ ambiente.descricao }}</p>
+    <small class="text-muted">Usuário: {{ ambiente.usuario }}</small>
+  </div>
+</div>
+{% endblock %}

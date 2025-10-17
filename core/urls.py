@@ -8,5 +8,7 @@ urlpatterns = [
     path('', CustomLoginView.as_view(), name='login'),
     path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('register/', views.registro, name='register'),
-    path('ar_condicionado/', include('ar_condicionado.urls')), 
+    path('ar_condicionado/', include('ar_condicionado.urls')),
+    path('ambiente/<int:pk>/', views.ambiente_detail, name='ambiente_detail'),
+    path('dispositivo/<int:pk>/', views.dispositivo_detail, name='dispositivo_detail'),
 ]

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 from django.urls import reverse
 
 
@@ -72,7 +74,7 @@ class Dispositivo(models.Model):
         ordering = ['nome']
 
     def __str__(self):
-        return f"{self.nome} ({self.get_tipo_display()})"
+        return getattr(self, 'nome', f'Dispositivo {self.pk}')
 
     def get_absolute_url(self):
         return reverse('dispositivo_detail', kwargs={'pk': self.pk})

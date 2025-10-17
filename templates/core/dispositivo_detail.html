@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Dispositivo: {{ dispositivo.nome }}{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">{{ dispositivo.nome }}</h4>
+    <p class="card-text">{{ dispositivo.descricao }}</p>
+    <ul class="list-unstyled">
+      <li><strong>ID:</strong> {{ dispositivo.pk }}</li>
+      <li><strong>Ambiente:</strong> {{ dispositivo.ambiente }}</li>
+      <li><strong>Usuário:</strong> {{ dispositivo.usuario }}</li>
+      <li><strong>Criado em:</strong> {{ dispositivo.criado_em }}</li>
+    </ul>
+
+    {% comment %} Se o Dispositivo referencia um ArCondicionado via campo `ar`, use painel_pk; senão abra painel sem pk {% endcomment %}
+    {% if dispositivo.ar %}
+      <a class="btn btn-primary" href="{% url 'painel_pk' dispositivo.ar.pk %}">Abrir Painel do Ar</a>
+    {% else %}
+      <a class="btn btn-primary" href="{% url 'painel' %}">Abrir Painel</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

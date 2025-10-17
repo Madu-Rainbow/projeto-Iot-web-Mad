@@ -1,15 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
+from .models import Ambiente, Dispositivo
+
 
 
 #def home(request):
   #  """Página inicial"""
  #   return render(request, 'core/home.html')
+
+def ambiente_detail(request, pk):
+    ambiente = get_object_or_404(Ambiente, pk=pk)
+    return render(request, 'core/ambiente_detail.html', {'ambiente': ambiente})
+
 
 
 @login_required
@@ -17,6 +24,9 @@ def dashboard(request):
     """Dashboard principal para usuários autenticados"""
     return render(request, 'core/dashboard.html')
 
+def dispositivo_detail(request, pk):
+    dispositivo = get_object_or_404(Dispositivo, pk=pk)
+    return render(request, 'core/dispositivo_detail.html', {'dispositivo': dispositivo})
 
 def registro(request):
     """Página de registro de novos usuários"""
