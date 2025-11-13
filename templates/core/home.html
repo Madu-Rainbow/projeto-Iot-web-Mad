@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Início - Sistema IoT{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-microchip me-3"></i>
+            Sistema IoT Fablab
+        </h1>
+        <p class="lead mb-4">
+            Sistema web integrado para gestão do Laboratório de Fabricação Digital (FabLab) do IFMT. Esta plataforma combina funcionalidades administrativas, agendamento de recursos, controle de inventário, automação de dispositivos e comunicação com usuários.
+        </p>
+        {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-user-plus me-2"></i>Começar Agora
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Entrar
+            </a>
+        </div>
+        {% else %}
+        <div class="mt-4">
+            <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">
+                <i class="fas fa-tachometer-alt me-2"></i>Ir para Dashboard
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container mb-5">
+    <div class="row text-center mb-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">Funcionalidades Principais</h2>
+            <p class="text-muted">Descubra as principais funcionalidades do nosso sistema</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h5 class="card-title">Gestão de Dispositivos</h5>
+                    <p class="card-text">
+                    texto muito elaborado 
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5 class="card-title">Monitoramento de Sensores</h5>
+                    <p class="card-text">
+                        texto super foda 2
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h5 class="card-title">Controle de Ambientes</h5>
+                    <p class="card-text">
+                        teste teste teste
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+{% if not user.is_authenticated %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h3 class="mb-4">Pronto para começar?</h3>
+        <p class="lead mb-4">
+            Cadastre-se agora e comece a gerenciar seus dispositivos IoT hoje mesmo.
+        </p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-rocket me-2"></i>Criar Conta Gratuita
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
