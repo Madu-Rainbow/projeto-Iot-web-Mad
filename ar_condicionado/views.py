@@ -21,7 +21,8 @@ def painel(request,pk=None):
         if first:
             return redirect('painel_pk', pk=first.pk)
         # nenhum ar cadastrado: mostrar índice (vazio)
-        
+        ars = ArCondicionado.objects.all()
+        return render(request, 'painel.html', {'ars': ars})
 
     ar = _get_ar(pk)
 
