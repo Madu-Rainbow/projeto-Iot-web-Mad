@@ -1,12 +1,15 @@
 from django.contrib import admin
 from .models import Ambiente, Dispositivo, TipoSensor, Sensor, LeituraSensor
 
+"""_summary_
 
-@admin.register(TipoSensor)
+    @admin.register(TipoSensor)
 class TipoSensorAdmin(admin.ModelAdmin):
     list_display = ['nome', 'unidade', 'descricao']
     search_fields = ['nome', 'unidade']
     ordering = ['nome']
+        _type_: _description_
+    """
 
 
 @admin.register(Ambiente)
@@ -108,6 +111,7 @@ class SensorAdmin(admin.ModelAdmin):
     ultima_leitura_valor.short_description = 'Última Leitura'
 
 
+"""     
 @admin.register(LeituraSensor)
 class LeituraSensorAdmin(admin.ModelAdmin):
     list_display = ['sensor', 'valor_formatado', 'timestamp', 'observacao']
@@ -129,8 +133,7 @@ class LeituraSensorAdmin(admin.ModelAdmin):
     def valor_formatado(self, obj):
         return obj.valor_formatado
     valor_formatado.short_description = 'Valor'
-
-
+"""
 # Personalizando o título do admin
 admin.site.site_header = "Sistema IoT - Administração"
 admin.site.site_title = "Sistema IoT"

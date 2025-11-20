@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'core',
     'ar_condicionado',
     'iluminacao',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
