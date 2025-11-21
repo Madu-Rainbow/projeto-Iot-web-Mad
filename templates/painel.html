@@ -1,120 +1,152 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Painel Ar-Condicionado</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f0f4f8; text-align: center; }
-        .painel { background: white; padding: 30px; border-radius: 15px; display: inline-block; margin-top: 50px; }
-        button { margin: 10px; padding: 10px 20px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .status { font-size: 1.2em; margin-top: 20px; }
-    </style>
-</head>
-<body>
-    {% extends "base.html" %}
+{% extends "base.html" %}
+
 {% block title %}Painel Ar Condicionado{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos customizados para o painel */
+    .ac-painel {
+        max-width: 500px; /* Limita a largura do painel principal */
+        margin: 50px auto;
+        padding: 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .ac-status-badge {
+        font-size: 1.1em;
+        padding: 0.5em 1.5em;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    .temp-display {
+        font-size: 4.5rem; /* Temperatura em destaque */
+        font-weight: 300;
+        margin-bottom: 0.1em;
+    }
+    .temp-controls .btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%; /* Botões redondos */
+        font-size: 1.5rem;
+    }
+    .card-header-power {
+        background-color: #343a40 !important; /* Fundo escuro para cabeçalho */
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <div class="card text-center mb-4">
-            <div class="card-header bg-primary text-white">
-                Status do Ar-Condicionado
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">
-                    {% if ar.ligado %}
-                        <span class="badge bg-success">Ligado</span>
-                    {% else %}
-                        <span class="badge bg-danger">Desligado</span>
-                    {% endif %}
-                </h5>
-                <form method="post" action="{% url 'alternar' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-warning">
-                        {% if ar.ligado %}Desligar{% else %}Ligar{% endif %}
-                    </button>
-                </form>
-            </div>
+
+{% if ar %}
+    <div class="ac-painel card border-0">
+        
+        <div class="card-header card-header-power text-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-snowflake me-2"></i> Ar-Condicionado
+            </h5>
+            <form method="post" action="{% url 'alternar' %}">
+                {% csrf_token %}
+                <button type="submit" 
+                        class="btn btn-sm {% if ar.ligado %}btn-danger{% else %}btn-success{% endif %}">
+                    <i class="fas {% if ar.ligado %}fa-power-off{% else %}fa-bolt{% endif %} me-1"></i>
+                    {% if ar.ligado %}Desligar{% else %}Ligar{% endif %}
+                </button>
+            </form>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center mb-4">
-            <div class="card-header bg-info text-white">
-                Temperatura
-            </div>
-            <div class="card-body">
-                <h5 class="card-title display-4">{{ ar.temperatura }}°C</h5>
-                <div class="d-flex justify-content-center gap-2">
-                    <form method="post" action="{% url 'aumentar' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success" {% if not ar.ligado %}disabled{% endif %}>
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </form>
+
+        <div class="card-body p-4">
+            
+            <div class="text-center mb-4">
+                <p class="text-muted mb-1">Temperatura Atual</p>
+                <div class="temp-display text-primary">
+                    {{ ar.temperatura }}<small style="font-size: 0.5em;">°C</small>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-3 temp-controls">
                     <form method="post" action="{% url 'diminuir' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger" {% if not ar.ligado %}disabled{% endif %}>
+                        <button type="submit" class="btn btn-outline-danger" 
+                                {% if not ar.ligado %}disabled{% endif %}>
                             <i class="fas fa-minus"></i>
                         </button>
                     </form>
-                </div>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">
-                    {% if ar.ligado %}
-                        <span class="badge bg-success">Ligado</span>
-                        <br>
-                        <small>Tempo ligado: 
-                            {% if tempo_ligado %}
-                                {% with total=tempo_ligado.total_seconds %}
-                                    {% with minutos=total|divisibleby:60 segundos=total|floatformat:0 %}
-                                        {{ minutos|floatformat:0 }} min {{ segundos|floatformat:0 }} seg
-                                    {% endwith %}
-                                {% endwith %}
-                            {% else %}
-                                0 segundos
-                            {% endif %}
-                        </small>
-                    {% else %}
-                        <span class="badge bg-danger">Desligado</span>
-                    {% endif %}
-                </h5>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% if ars %}
-    {% for ar in ars %}
-        
-        <div class="container">
-            <div class="card text-center mb-3" style="max-width: 250px; margin: 0 auto; font-size: 0.9em;">
-                <div class="card-header bg-secondary text-white py-2">
-                    Modo de Operação
-                </div>
-                <div class="card-body p-2">
-                    <form method="post" action="{% url 'alterar_modo_with_pk' ar.pk %}"> 
+                    
+                    <form method="post" action="{% url 'aumentar' %}">
                         {% csrf_token %}
-                        <select name="modo" class="form-select form-select-sm w-75 mx-auto mb-2"
+                        <button type="submit" class="btn btn-outline-success" 
                                 {% if not ar.ligado %}disabled{% endif %}>
-                            <option value="Frio" {% if ar.modo == "Frio" %}selected{% endif %}>❄️ Frio</option>
-                            <option value="Quente" {% if ar.modo == "Quente" %}selected{% endif %}>🔥 Quente</option>
-                            <option value="Ventilar" {% if ar.modo == "Ventilar" %}selected{% endif %}>💨 Ventilar</option>
-                            <option value="Automático" {% if ar.modo == "Automático" %}selected{% endif %}>⚙️ Automático</option>
-                        </select>
-                        <button type="submit" class="btn btn-info btn-sm" {% if not ar.ligado %}disabled{% endif %}>
-                            Aplicar
+                            <i class="fas fa-plus"></i>
                         </button>
                     </form>
                 </div>
             </div>
+
+            <hr class="my-4">
+
+            <div class="row text-center">
+                
+                <div class="col-sm-6 mb-3">
+                    <h6 class="text-muted small fw-bold mb-2">MODO ATUAL</h6>
+                    <div class="card bg-light border-secondary p-2">
+                        <form method="post" action="{% url 'alterar_modo_with_pk' ar.pk %}"> 
+                            {% csrf_token %}
+                            <select name="modo" class="form-select form-select-sm mb-2"
+                                    {% if not ar.ligado %}disabled{% endif %}>
+                                <option value="Frio" {% if ar.modo == "Frio" %}selected{% endif %}>❄️ Frio</option>
+                                <option value="Quente" {% if ar.modo == "Quente" %}selected{% endif %}>🔥 Quente</option>
+                                <option value="Ventilar" {% if ar.modo == "Ventilar" %}selected{% endif %}>💨 Ventilar</option>
+                                <option value="Automático" {% if ar.modo == "Automático" %}selected{% endif %}>⚙️ Automático</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-info w-100" 
+                                    {% if not ar.ligado %}disabled{% endif %}>
+                                Aplicar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-3">
+                    <h6 class="text-muted small fw-bold mb-2">STATUS E TEMPO</h6>
+                    <div class="card p-3 border-{% if ar.ligado %}success{% else %}danger{% endif %}">
+                        {% if ar.ligado %}
+                            <span class="ac-status-badge bg-success text-white">
+                                <i class="fas fa-check-circle me-1"></i> OPERANDO
+                            </span>
+                            <small class="mt-2 text-muted">
+                                Tempo ativo:
+                                <span class="fw-bold text-dark">
+                                    {% if tempo_ligado %}
+                                        {% with total=tempo_ligado.total_seconds|floatformat:0 %}
+                                            {% with minutos=total|divisibleby:60|floatformat:0 segundos=total|floatformat:0 %}
+                                                {{ minutos }} min {{ segundos }} seg
+                                            {% endwith %}
+                                        {% endwith %}
+                                    {% else %}
+                                        0 segundos
+                                    {% endif %}
+                                </span>
+                            </small>
+                        {% else %}
+                            <span class="ac-status-badge bg-danger text-white">
+                                <i class="fas fa-times-circle me-1"></i> DESATIVADO
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            
         </div>
-        
-    {% endfor %}
+    </div>
+{% else %}
+    <div class="container my-5">
+        <div class="alert alert-info text-center" role="alert">
+            <h4 class="alert-heading"><i class="fas fa-cogs me-2"></i>Configuração Necessária</h4>
+            <p>Nenhum aparelho de ar condicionado encontrado no sistema. Por favor, verifique os dispositivos cadastrados.</p>
+        </div>
+    </div>
 {% endif %}
 
-</div>
 {% endblock %}
-</body>
-</html>
