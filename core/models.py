@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 
 
+
 class Ambiente(models.Model):
     """Model para representar ambientes (ex: Sala, Cozinha, Jardim)"""
     nome = models.CharField(max_length=100, verbose_name='Nome')
@@ -99,9 +100,11 @@ class Dispositivo(models.Model):
         }
         return classes.get(self.status, 'bg-secondary')
 
+        
 
-class TipoSensor(models.Model):
-    """Model para tipos de sensores"""
+    """
+    class TipoSensor(models.Model):
+    Model para tipos de sensores
     nome = models.CharField(max_length=50, unique=True, verbose_name='Nome')
     unidade = models.CharField(max_length=10, verbose_name='Unidade de Medida')
     descricao = models.TextField(blank=True, null=True, verbose_name='Descrição')
@@ -113,12 +116,26 @@ class TipoSensor(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.unidade})"
+"""
+class TipoSensor(models.TextChoices):
+    AR_CONDICIONADO = 'AC', 'Ar-Condicionado'
+    LUZ = 'LUZ', 'Luz'
+    
+
+
 
 
 class Sensor(models.Model):
     """Model para representar sensores específicos"""
     nome = models.CharField(max_length=100, verbose_name='Nome')
-    tipo = models.ForeignKey(TipoSensor, on_delete=models.CASCADE, verbose_name='Tipo de Sensor')
+    #tipo = models.ForeignKey(TipoSensor, on_delete=models.CASCADE, verbose_name='Tipo de Sensor')
+    tipo = models.CharField(
+        max_length=3, # Tamanho máximo da chave (AC, LUZ)
+        choices=TipoSensor.choices,
+        default=TipoSensor.LUZ,
+        verbose_name='Tipo de Sensor'
+    )
+    
     dispositivo = models.ForeignKey(Dispositivo, on_delete=models.CASCADE, related_name='sensores', verbose_name='Dispositivo')
     ambiente = models.ForeignKey(Ambiente, on_delete=models.CASCADE, related_name='sensores', verbose_name='Ambiente')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuário')
@@ -140,7 +157,7 @@ class Sensor(models.Model):
         unique_together = ['dispositivo', 'tipo']
 
     def __str__(self):
-        return f"{self.nome} - {self.tipo.nome}"
+        return f"{self.nome} - {self.get_tipo_display()}"
 
     def get_absolute_url(self):
         return reverse('sensor_detail', kwargs={'pk': self.pk})

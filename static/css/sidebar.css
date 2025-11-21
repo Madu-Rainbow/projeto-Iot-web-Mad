@@ -1,0 +1,81 @@
+/* CSS para reduzir e homogeneizar blocos da sidebar */
+
+.position-sticky {
+  top: 1rem;
+}
+
+/* cartões homogêneos */
+.position-sticky .card {
+  min-height: 60px; /* Altura MINIMA ainda mais reduzida (era 76px) */
+  border-radius: 0.375rem;
+  margin-bottom: 0.4rem; /* Reduzindo margem inferior */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* corpo dos cartões mais compacto */
+.position-sticky .card .card-body {
+  padding: 0.3rem 0.5rem; /* Padding reduzido (era 0.45rem 0.6rem) */
+  text-align: center;
+}
+
+/* título / número */
+.position-sticky .stats-number,
+.position-sticky .card .card-body .sidebar-stats {
+  font-size: 1rem; /* Fonte ligeiramente menor (era 1.05rem) */
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.1rem; /* Margem inferior reduzida */
+}
+
+/* label menor e com cor suave */
+.position-sticky .card .card-body > div:last-child {
+  font-size: 0.78rem; /* Fonte ligeiramente menor (era 0.82rem) */
+  color: rgba(0,0,0,0.65);
+  margin: 0;
+}
+
+/* cabeçalho das ações mais compacto */
+.position-sticky .card .card-header {
+  padding: 0.25rem 0.5rem; /* Padding reduzido (era 0.35rem 0.6rem) */
+  font-size: 0.85rem; /* Fonte ligeiramente menor (era 0.9rem) */
+}
+
+/* botões de ação pequenos e uniformes e MAIS QUADRADOS */
+.position-sticky .card .btn {
+  font-size: 0.78rem; /* Mantendo a fonte */
+  padding: 0.35rem 0.4rem; /* Ajuste aqui para ser mais quadrado. O padding vertical (0.35rem) está mais próximo do horizontal (0.4rem) */
+  /* Se precisar de um quadrado perfeito e fixo, você pode adicionar: */
+  /* width: 32px; */
+  /* height: 32px; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+/* garantir contraste nas variantes coloridas */
+.position-sticky .card.bg-success,
+.position-sticky .card.bg-info,
+.position-sticky .card.bg-warning {
+  color: #fff;
+}
+
+/* tornar a lista de ações mais compacta e uniforme */
+.position-sticky .d-grid.gap-2 > .btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem; /* Gap ligeiramente menor (era 0.5rem) */
+}
+
+/* responsividade: remover position sticky em telas pequenas */
+@media (max-width: 767.98px) {
+  .position-sticky {
+    position: static !important;
+  }
+  .position-sticky .card {
+    min-height: 50px; /* Reduzindo também na tela pequena (era 64px) */
+  }
+}

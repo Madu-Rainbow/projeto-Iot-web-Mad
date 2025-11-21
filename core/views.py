@@ -8,6 +8,9 @@ from django.urls import reverse_lazy
 from .models import Ambiente, Dispositivo
 
 
+from .models import Sensor, Ambiente  # Adicione seus modelos
+
+
 
 #def home(request):
   #  """Página inicial"""
@@ -22,7 +25,23 @@ def ambiente_detail(request, pk):
 @login_required
 def dashboard(request):
     """Dashboard principal para usuários autenticados"""
-    return render(request, 'core/dashboard.html')
+    if request.user.is_superuser:
+        dispositivos_qs = Dispositivo.objects.all()
+        sensores_qs = Sensor.objects.all()
+        ambientes_qs = Ambiente.objects.all()
+    else:
+        # Se você filtra por usuário, mantenha a lógica de filtragem
+        dispositivos_qs = Dispositivo.objects.filter(usuario=request.user)
+        sensores_qs = Sensor.objects.filter(usuario=request.user)
+        ambientes_qs = Ambiente.objects.filter(usuario=request.user)
+    context = {
+        'dispositivos_count': dispositivos_qs.count(),
+        'sensores_count': sensores_qs.count(),
+        'ambientes_count': ambientes_qs.count(),
+        #'usuarios_count': User.objects.count(), # Contagem de todos os usuários
+    }
+
+    return render(request, 'core/dashboard.html',context)
 
 def dispositivo_detail(request, pk):
     dispositivo = get_object_or_404(Dispositivo, pk=pk)

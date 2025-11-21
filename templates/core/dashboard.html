@@ -1,130 +1,83 @@
 {% extends 'base.html' %}
-
 {% block title %}Dashboard - Sistema IoT{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">
-                <i class="fas fa-tachometer-alt me-2"></i>
-                Dashboard
-            </h1>
-            <small class="text-muted">Bem-vindo, {{ user.username }}!</small>
-        </div>
-    </div>
-</div>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 
-<!-- Stats Cards -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card stats-card">
-            <div class="card-body text-center">
-                <div class="stats-number">0</div>
-                <div>Dispositivos</div>
+<div class="container-fluid"> {# Usando container-fluid para melhor aproveitamento do espaço #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="h3"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+                <small class="text-muted">Bem-vindo, {{ user.username }}!</small>
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <div class="stats-number">0</div>
-                <div>Sensores</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <div class="stats-number">0</div>
-                <div>Ambientes</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body text-center">
-                <div class="stats-number">0</div>
-                <div>Usuários</div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Quick Actions -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-bolt me-2"></i>Ações Rápidas
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <a href="{% url 'admin:core_dispositivo_add' %}" class="btn btn-primary btn-lg w-100">
-                            <i class="fas fa-plus-circle me-2"></i>
-                            <br>Novo Dispositivo
-                        </a>
+    <div class="row">
+        
+        {# Coluna Esquerda: SIDEBAR (3 colunas de largura) - CONTEÚDO EMBUTIDO AQUI #}
+        <div class="col-md-3">
+            <div class="position-sticky" style="top:1rem;">
+                <div class="d-flex flex-column">
+                    <div class="card mb-3">
+                        <div class="card-body text-center">
+                            <div class="stats-number">{{ dispositivos_count|default:"0" }}</div>
+                            <div>Dispositivos</div>
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <a href="{% url 'admin:core_sensor_add' %}" class="btn btn-success btn-lg w-100">
-                            <i class="fas fa-thermometer-half me-2"></i>
-                            <br>Novo Sensor
-                        </a>
+
+                    <div class="card bg-success text-white mb-3">
+                        <div class="card-body text-center">
+                            <div class="stats-number">{{ sensores_count|default:"0" }}</div>
+                            <div>Sensores</div>
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <a href="{% url 'admin:core_ambiente_add' %}" class="btn btn-info btn-lg w-100">
-                            <i class="fas fa-home me-2"></i>
-                            <br>Novo Ambiente
-                        </a>
+
+                    <div class="card bg-info text-white mb-3">
+                        <div class="card-body text-center">
+                            <div class="stats-number">{{ ambientes_count|default:"0" }}</div>
+                            <div>Ambientes</div>
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <a href="{% url 'admin:index' %}" class="btn btn-secondary btn-lg w-100">
-                            <i class="fas fa-cog me-2"></i>
-                            <br>Admin Panel
-                        </a>
+
+                    <div class="card bg-warning text-white mb-3">
+                        <div class="card-body text-center">
+                            <div class="stats-number">{{ usuarios_count|default:"0" }}</div>
+                            <div>Usuários</div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'admin:core_dispositivo_add' %}" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-plus-circle me-2"></i> Novo Dispositivo
+                            </a>
+                            <a href="{% url 'admin:core_sensor_add' %}" class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-thermometer-half me-2"></i> Novo Sensor
+                            </a>
+                            <a href="{% url 'admin:core_ambiente_add' %}" class="btn btn-info btn-sm w-100">
+                                <i class="fas fa-home me-2"></i> Novo Ambiente
+                            </a>
+                            <a href="{% url 'admin:index' %}" class="btn btn-secondary btn-sm w-100">
+                                <i class="fas fa-cog me-2"></i> Admin
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        {# Fim da Coluna Esquerda #}
 
-<!-- Recent Activity -->
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-list me-2"></i>Atividade Recente
-                </h5>
+
+        {# Coluna Direita: Conteúdo Principal (9 colunas de largura) #}
+        <div class="col-md-9">
+            <div class="card mb-3">
+                <div class="card-header"><h5 class="mb-0">Atividade Recente</h5></div>
+                <div class="card-body">Nenhuma atividade ainda.</div>
             </div>
-            <div class="card-body">
-                <div class="text-center text-muted py-4">
-                    <i class="fas fa-inbox fa-3x mb-3"></i>
-                    <p>Nenhuma atividade ainda.</p>
-                    <p class="small">Comece adicionando dispositivos e sensores!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Alertas
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="text-center text-muted py-4">
-                    <i class="fas fa-shield-alt fa-3x mb-3 text-success"></i>
-                    <p>Tudo funcionando bem!</p>
-                    <p class="small">Nenhum alerta no momento.</p>
-                </div>
-            </div>
+            {# Você pode adicionar mais cards ou gráficos aqui #}
         </div>
     </div>
 </div>

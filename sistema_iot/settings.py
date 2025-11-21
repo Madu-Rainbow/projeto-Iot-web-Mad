@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'iluminacao',
     'rest_framework',
     'rest_framework.authtoken',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

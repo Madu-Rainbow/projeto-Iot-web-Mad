@@ -1,97 +1,51 @@
-/* Custom CSS for Sistema IoT */
+/* Custom CSS para o Sistema IoT */
 
+/* Fundo sutil para o corpo da página */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; /* Cinza muito claro */
 }
 
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
+/* Estilo para formulários de login/registro */
+.login-container {
+    /* Centraliza o formulário na tela verticalmente */
+    height: 100%;
 }
 
+/* Estilo para inputs (formulários) */
+.form-control {
+    border-radius: 8px; /* Cantos arredondados */
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Cor primária do Bootstrap */
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estilo para botões (geral) */
+.btn {
+    border-radius: 8px; /* Cantos arredondados */
+    padding: 10px 15px;
+    font-weight: 600;
+}
+
+/* Efeito de sombra leve para cards (opcional) */
 .card {
+    border-radius: 12px;
     border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: box-shadow 0.15s ease-in-out;
 }
 
-.card:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+/* Navbar: ajusta a cor primária para um azul mais forte */
+.bg-primary {
+    background-color: #0069d9 !important; /* Azul mais escuro que o padrão */
 }
 
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+.text-primary {
+    color: #007bff !important;
 }
 
-.btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-}
-
-.hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 80px 0;
-    margin-bottom: 50px;
-}
-
-.feature-card {
-    text-align: center;
-    padding: 30px 20px;
+/* Classe auxiliar para botões e cards no login */
+.custom-btn-radius {
     border-radius: 10px;
-    transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    color: #0d6efd;
-    margin-bottom: 20px;
-}
-
-.stats-card {
-    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-    border-radius: 15px;
-}
-
-.stats-number {
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.footer {
-    background-color: #343a40;
-    color: white;
-}
-
-/* Loading animation */
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 50px 0;
-    }
-    
-    .feature-card {
-        margin-bottom: 30px;
-    }
 }
