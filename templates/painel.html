@@ -1,6 +1,56 @@
 {% extends "base.html" %}
 
 {% block title %}Painel Ar Condicionado{% endblock %}
+{% block extra_js %}
+<script>
+    function formatTime(totalSeconds) {
+        // Garante que é um número
+        totalSeconds = parseInt(totalSeconds); 
+        
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        
+        // Retorna a string formatada: 1 min 05 seg
+        return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} seg`;
+    }
+
+    function updateTimer() {
+        const timerElement = document.getElementById('tempo-ativo');
+
+        // Se o elemento não existe (ou seja, o AR está desligado), pare.
+        if (!timerElement) {
+            return;
+        }
+
+        // Pega o número atual de segundos
+        let currentSeconds = parseInt(timerElement.getAttribute('data-start-seconds'));
+        
+        // 1. Incrementa o contador
+        currentSeconds += 1;
+        
+        // 2. Atualiza o texto na tela
+        timerElement.textContent = formatTime(currentSeconds);
+
+        // 3. Atualiza o atributo de dados para a próxima iteração
+        timerElement.setAttribute('data-start-seconds', currentSeconds);
+    }
+
+    // Inicializa a contagem assim que a página carrega
+    document.addEventListener('DOMContentLoaded', function() {
+        const timerElement = document.getElementById('tempo-ativo');
+        
+        if (timerElement) {
+            // Define o valor inicial formatado (assim o usuário não vê um número bruto)
+            let initialSeconds = parseInt(timerElement.getAttribute('data-start-seconds'));
+            timerElement.textContent = formatTime(initialSeconds);
+            
+            // Inicia o timer para atualizar a cada 1 segundo (1000ms)
+            setInterval(updateTimer, 1000);
+        }
+    });
+
+</script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -65,22 +115,23 @@
                 </div>
                 
                 <div class="d-flex justify-content-center gap-3 temp-controls">
-                    <form method="post" action="{% url 'diminuir' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger" 
-                                {% if not ar.ligado %}disabled{% endif %}>
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </form>
-                    
-                    <form method="post" action="{% url 'aumentar' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-success" 
-                                {% if not ar.ligado %}disabled{% endif %}>
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </form>
-                </div>
+    
+                <form method="post" action="{% url 'diminuir_with_pk' ar.pk %}"> 
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger" 
+                            {% if not ar.ligado %}disabled{% endif %}>
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </form>
+                
+                <form method="post" action="{% url 'aumentar_with_pk' ar.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success" 
+                            {% if not ar.ligado %}disabled{% endif %}>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </form>
+            </div>
             </div>
 
             <hr class="my-4">
@@ -108,33 +159,25 @@
                 </div>
 
                 <div class="col-sm-6 mb-3">
-                    <h6 class="text-muted small fw-bold mb-2">STATUS E TEMPO</h6>
-                    <div class="card p-3 border-{% if ar.ligado %}success{% else %}danger{% endif %}">
-                        {% if ar.ligado %}
-                            <span class="ac-status-badge bg-success text-white">
-                                <i class="fas fa-check-circle me-1"></i> OPERANDO
-                            </span>
-                            <small class="mt-2 text-muted">
-                                Tempo ativo:
-                                <span class="fw-bold text-dark">
-                                    {% if tempo_ligado %}
-                                        {% with total=tempo_ligado.total_seconds|floatformat:0 %}
-                                            {% with minutos=total|divisibleby:60|floatformat:0 segundos=total|floatformat:0 %}
-                                                {{ minutos }} min {{ segundos }} seg
-                                            {% endwith %}
-                                        {% endwith %}
-                                    {% else %}
-                                        0 segundos
-                                    {% endif %}
-                                </span>
-                            </small>
-                        {% else %}
-                            <span class="ac-status-badge bg-danger text-white">
-                                <i class="fas fa-times-circle me-1"></i> DESATIVADO
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
+    <h6 class="text-muted small fw-bold mb-2">STATUS E TEMPO</h6>
+    <div class="card p-3 border-{% if ar.ligado %}success{% else %}danger{% endif %}">
+        {% if ar.ligado %}
+            <span class="ac-status-badge bg-success text-white">
+                <i class="fas fa-check-circle me-1"></i> OPERANDO
+            </span>
+            <small class="mt-2 text-muted">
+                Tempo ativo:
+                <span class="fw-bold text-dark" id="tempo-ativo" 
+                      data-start-seconds="{{ tempo_ligado_seconds }}">
+                    </span>
+            </small>
+        {% else %}
+            <span class="ac-status-badge bg-danger text-white">
+                <i class="fas fa-times-circle me-1"></i> DESATIVADO
+            </span>
+        {% endif %}
+    </div>
+</div>
 
             </div>
             

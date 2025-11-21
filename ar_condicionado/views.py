@@ -33,24 +33,21 @@ def painel(request, pk=None):
         ar = _get_ar(pk)
         
         # Lógica de Tempo e Variação (Mantida)
-        if ar.ligado and not ar.inicio_ligado:
-            ar.inicio_ligado = timezone.now()
-            ar.save()
-        elif not ar.ligado and ar.inicio_ligado:
-            ar.inicio_ligado = None
-            ar.save()
-
-        if ar.ligado and ar.inicio_ligado:
-            tempo_ligado = timezone.now() - ar.inicio_ligado
+        tempo_ligado_seconds = 0
+    if ar.ligado and ar.inicio_ligado:
+        # Pega a diferença de tempo (timedelta)
+        tempo_delta = timezone.now() - ar.inicio_ligado
+        # Converte para segundos (inteiro)
+        tempo_ligado_seconds = int(tempo_delta.total_seconds())
         
-        if ar.ligado:
-            ar.temperatura += random.choice([-1, 0, 1])
-            ar.save()
+       # if ar.ligado:
+        #    ar.temperatura += random.choice([-1, 0, 1])
+         #   ar.save()
 
     # Passamos sempre 'ar' e 'tempo_ligado', que podem ser None.
     context = {
         'ar': ar,
-        'tempo_ligado': tempo_ligado
+        'tempo_ligado_seconds': tempo_ligado_seconds
     }
     return render(request, 'painel.html', context)
 
@@ -62,21 +59,21 @@ def alternar_status(request, pk=None):
     ar.save()
     return redirect('painel_pk', pk=ar.pk)
 
-def aumentar_temp(request, pk=None):
-    ar = _get_ar(pk)
-    if not ar:
-        return redirect('painel')
-    ar.temperatura = (ar.temperatura or 0) + 1
-    ar.save()
-    return redirect('painel_pk', pk=ar.pk)
+def aumentar(request, pk):
+    ar = _get_ar(pk) # Função para buscar o objeto por PK
+    if request.method == 'POST' and ar.ligado:
+        if ar.temperatura < 30:
+            ar.temperatura += 1
+        ar.save()
+    return redirect('painel_pk', pk=pk)
 
-def diminuir_temp(request, pk=None):
+def diminuir(request, pk):
     ar = _get_ar(pk)
-    if not ar:
-        return redirect('painel')
-    ar.temperatura = (ar.temperatura or 0) - 1
-    ar.save()
-    return redirect('painel_pk', pk=ar.pk)
+    if request.method == 'POST' and ar.ligado:
+        if ar.temperatura > 18:
+            ar.temperatura -= 1
+        ar.save()
+    return redirect('painel_pk', pk=pk)
 
 def alterar_modo(request, pk=None):
     ar = _get_ar(pk)
