@@ -2,16 +2,17 @@
 
 {% load widget_tweaks %}
 
-{% block title %}Login - Sistema IoT{% endblock %}
+{% load static %}{% block title %}Login - Sistema IoT{% endblock %}
 
 {% block content %}
-
 <div class="container-fluid login-container">
     <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-lg border-0">
                 <div class="card-header bg-primary text-white text-center py-3">
-                    <i class="fas fa-sign-in-alt fa-2x mb-2"></i>
+                    <img src="{% static 'img/logo_ifmt.png' %}" 
+                        alt="Logo IFMT" 
+                        style="width: 100px; height: 100px; margin-bottom: 8px;">
                     <h2 class="h5 mb-0">Acesso ao Sistema IoT</h2>
                 </div>
                 <div class="card-body p-4">
@@ -39,7 +40,6 @@
                             <label for="{{ form.username.id_for_label }}" class="form-label small fw-bold">
                                 <i class="fas fa-user me-2"></i>{{ form.username.label }}
                             </label>
-                            {# Adicionando a classe form-control para estilização do Bootstrap #}
                             {{ form.username|add_class:"form-control" }}
                             {% if form.username.help_text %}
                                 <div class="form-text">{{ form.username.help_text }}</div>
@@ -50,7 +50,6 @@
                             <label for="{{ form.password.id_for_label }}" class="form-label small fw-bold">
                                 <i class="fas fa-lock me-2"></i>{{ form.password.label }}
                             </label>
-                            {# Adicionando a classe form-control para estilização do Bootstrap #}
                             {{ form.password|add_class:"form-control" }}
                             {% if form.password.help_text %}
                                 <div class="form-text">{{ form.password.help_text }}</div>
@@ -79,5 +78,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

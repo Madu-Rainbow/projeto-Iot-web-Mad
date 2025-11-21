@@ -1,51 +1,47 @@
-/* Custom CSS para o Sistema IoT */
+/* Custom CSS para o Sistema IoT (Paleta IFMT: Verde Escuro) */
 
-/* Fundo sutil para o corpo da página */
+:root {
+    /* Cores Institucionais */
+    --ifmt-primary: #006400; /* Verde Escuro (Cor principal) */
+    --ifmt-light-background: #f1f4f8; /* Cinza/Azul Claro para fundos sutis */
+}
+
+/* Fundo da Página */
 body {
-    background-color: #f8f9fa; /* Cinza muito claro */
+    background-color: var(--ifmt-light-background); 
 }
 
-/* Estilo para formulários de login/registro */
-.login-container {
-    /* Centraliza o formulário na tela verticalmente */
-    height: 100%;
+/* 🛑 REGRAS DE SOBRESCRITA: Uso de !important para forçar a cor IFMT 🛑 */
+
+/* Fundo primário (Navbar brand, Card Header) */
+.bg-primary {
+    background-color: var(--ifmt-primary) !important; 
 }
 
-/* Estilo para inputs (formulários) */
-.form-control {
-    border-radius: 8px; /* Cantos arredondados */
-    padding: 10px 15px;
-    transition: all 0.3s ease;
+/* Botão primário */
+.btn-primary {
+    background-color: var(--ifmt-primary) !important;
+    border-color: var(--ifmt-primary) !important;
 }
 
+.btn-primary:hover {
+    background-color: #004d00 !important; /* Verde um pouco mais escuro no hover */
+    border-color: #004d00 !important;
+}
+
+/* Texto primário */
+.text-primary {
+    color: var(--ifmt-primary) !important;
+}
+
+
+/* Mantendo o foco e o estilo de input */
 .form-control:focus {
-    border-color: #007bff; /* Cor primária do Bootstrap */
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    border-color: var(--ifmt-primary); 
+    box-shadow: 0 0 0 0.25rem rgba(0, 100, 0, 0.25); /* Sombra verde */
 }
 
-/* Estilo para botões (geral) */
-.btn {
-    border-radius: 8px; /* Cantos arredondados */
-    padding: 10px 15px;
-    font-weight: 600;
-}
-
-/* Efeito de sombra leve para cards (opcional) */
 .card {
     border-radius: 12px;
     border: none;
-}
-
-/* Navbar: ajusta a cor primária para um azul mais forte */
-.bg-primary {
-    background-color: #0069d9 !important; /* Azul mais escuro que o padrão */
-}
-
-.text-primary {
-    color: #007bff !important;
-}
-
-/* Classe auxiliar para botões e cards no login */
-.custom-btn-radius {
-    border-radius: 10px;
 }
